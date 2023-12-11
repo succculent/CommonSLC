@@ -1,0 +1,44 @@
+html,
+body
+{
+    overflow: hidden;
+    background-color: rgb( 255, 255, 255 );
+    margin: 0;
+    padding: 0;
+}
+
+.webgl
+{
+    position: absolute;
+    outline: none;
+    z-index: 1;
+    width: 100%;
+    image-rendering: optimizeSpeed;
+}
+
+.popup
+{
+    color: rgb(0, 50, 20);
+    background-color: rgba( 255, 255, 255, 0.3 );
+    border-radius: 3px;
+    z-index: 5;
+    position: absolute;
+    float: left;
+    width: 400px;
+    text-align: center;
+}
+
+.hidden
+{
+    visibility: hidden;
+    /* transition: 'visibility' 5s; */
+}
+
+h1
+{
+    font-size: 1.5em;
+}
+h2
+{
+    font-size: 1em;
+}
