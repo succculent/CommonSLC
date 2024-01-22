@@ -1,5 +1,5 @@
 # COMMON SLC
-This is the repo for Common Productions SLC. This will feature our work and act as a homepage with information and links. Site published at commonslc.com
+This is the repo for Common Collective, Salt Lake City. This will feature our work and act as a homepage with information and links. Site published at commonslc.com
 
 ### ToDo:
 1. Add a feature showcasing our next event
