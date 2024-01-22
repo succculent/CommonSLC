@@ -1,20 +1,25 @@
 import _ from 'lodash';
 import './style.css';
 import * as THREE from 'three'
-import song1 from './assets/song1.mp3'
-import song2 from './assets/song2.mp3'
-import song3 from './assets/song3.mp3'
-import song4 from './assets/song4.mp3'
-import song5 from './assets/song5.mp3'
 import AudioInstance from './Components/Audio.js'
 import Renderer from './Components/Renderer.js' 
-import Popup from './Components/Popup.js'
-import scene1 from './Scenes/scene1.js'
-import scene2 from './Scenes/scene2.js'
-import scene3 from './Scenes/scene3.js'
-import scene4 from './Scenes/scene4.js'
-import scene5 from './Scenes/scene5.js'
-import scene6 from './Scenes/scene6.js'
+import Scene from './Scenes/scene.js'
+import instaIcon from './assets/insta.png'
+import twitterIcon from './assets/twitter.png'
+import playIcon from './assets/play.png'
+import nextIcon from './assets/next.png'
+import prevIcon from './assets/prev.png'
+
+function createLink(url, icon, alt) {
+  var link = document.createElement('a');
+  link.href = url;
+  link.target = '_blank';
+  var icon_ = document.createElement('img');
+  icon_.src = icon;
+  icon_.alt = alt;
+  link.appendChild(icon_);
+  return link;
+}
 
 function component() {
     /*
@@ -30,87 +35,102 @@ function component() {
         height: window.innerHeight
     };
 
-    let A = new AudioInstance( 2048 );
-    let songs = [ song1, song2, song3, song4, song5 ]; //SONGS
-    let songNames = [ [ "Love", "DEAN, Syd" ], [ "El", "Ricky Tinez" ], [ "Earth (Live Version)", "Lapalux" ], [ "Honda (feat. pa salieu", "FKA twigs, Pa Salieu" ], [ "Stately, Yes", "Efdemin" ] ];
-    let curSongIndex = 0;
-    A.loadTrack( songs[curSongIndex] );
+    let A = new AudioInstance( 64 );
     element.appendChild( A.audio );
 
-    let s1 = new scene1( sizes, A );
-    let s2 = new scene2( sizes, A );
-    let s3 = new scene3( sizes, A );
-    let s4 = new scene4( sizes, A );
-    let s5 = new scene5( sizes, A );
-    let s6 = new scene6( sizes, A );
-    let scenes = [ s1, s2, s3, s6 ];
-    let curSceneIndex = 0;
-    let curScene = scenes[ curSceneIndex ];
-
-    let songLabels = [];
-    for (let i = 0; i < songNames.length; i++) {
-      let p = new Popup( songNames[ i ][ 0 ], songNames[ i ][ 1 ] );
-      element.appendChild( p.divv );
-      songLabels.push(p);
-    }
-    songLabels[ curSceneIndex ].activate()
-
+    let curScene = new Scene( sizes, A );
     let R = new Renderer( canvas, sizes );
 
-    window.addEventListener( 'resize', ( ) =>
-    {
+    window.addEventListener( 'resize', ( ) => {
         sizes.width = window.innerWidth;
         sizes.height = window.innerHeight;
         curScene.resize( sizes );
+        R.resize( sizes );
     });
 
-    window.addEventListener( "keydown", function ( event ) {
-        if ( event.defaultPrevented ) {
-          return; // Do nothing if the event was already processed
-        }
-        switch ( event.key ) {
-          case "ArrowDown":
-            if ( songLabels[ curSongIndex ].countDown ) songLabels[ curSongIndex ].deactivate();
-            if ( curSongIndex == 0 ) curSongIndex = songs.length - 1;
-            else curSongIndex--;
-            A.loadTrack( songs[curSongIndex] );
-            songLabels[curSongIndex].activate();
-            break;
-          case "ArrowUp":
-            if ( songLabels[ curSongIndex ].countDown ) songLabels[ curSongIndex ].deactivate();
-            curSongIndex = ( curSongIndex + 1 ) % songs.length;
-            A.loadTrack( songs[curSongIndex] );
-            songLabels[curSongIndex].activate();
-            break;
-          case "ArrowLeft":
-            if ( curSceneIndex == 0 ) curSceneIndex = scenes.length - 1;
-            else curSceneIndex--;
-            curScene = scenes[ curSceneIndex ];
-            break;
-          case "ArrowRight":
-            curSceneIndex = ( curSceneIndex + 1 ) % scenes.length;
-            curScene = scenes[ curSceneIndex ];
-            break;
-          default:
-            return; // Quit when this doesn't handle the key event.
-        }
-      
-        // Cancel the default action to avoid it being handled twice
-        event.preventDefault();
-    }, true);
+    window.addEventListener( 'mousemove', ( e ) => {
+      e.preventDefault();
+      const pointer = new THREE.Vector2();
+      pointer.x = (e.clientX / sizes.width) * 2 - 1;
+      pointer.y = (e.clientY / sizes.height) * -2 + 1;
+      curScene.mouseMove( pointer )
+    });
 
     const clock = new THREE.Clock( );
     const tick = ( ) =>
     {   
         var deltaTime = clock.getDelta( );
         var elapsedTime = clock.getElapsedTime( );
-        songLabels.forEach( ( p ) => { p.update( deltaTime ); } );
         A.onTick( );
         R.render( curScene.scene, curScene.C.camera );
         curScene.tick( deltaTime, elapsedTime, A );
         window.requestAnimationFrame( tick );
     };
     tick( );
+
+
+    var _titleDiv = document.createElement( 'div' );
+    var _title = document.createElement( 'h1' );
+    _title.innerHTML = "Common<br>Collective";
+    _title.classList.add( 'title' );
+    _titleDiv.appendChild( _title );
+    _titleDiv.classList.add( 'titleDiv' );
+    element.appendChild( _titleDiv );
+
+    var _bodyDiv = document.createElement( 'div' );
+    var _body = document.createElement( 'p' );
+    _body.innerHTML = "Harmonizing Art and Music<br><br><br>Salt Lake City's Creative Essence<br><br><br>Unveiling Exceptional Artistry";
+    _body.classList.add( 'bodyText' );
+    _bodyDiv.classList.add( 'bodyDiv' );
+    _bodyDiv.appendChild( _body );
+    element.appendChild( _bodyDiv );
+
+    var links = document.createElement( 'div' );
+
+    //prev
+    var prevButton = document.createElement('img');
+    prevButton.src = prevIcon;
+    prevButton.alt = 'Prev Song';
+    function prevClick( ) { A.prevSong(); }
+    prevButton.onclick = prevClick;
+    prevButton.classList.add( 'link' );
+    prevButton.classList.add( 'changeSong' )
+    links.appendChild(prevButton);
+
+    //PlayPause
+    var play_pause = document.createElement('img');
+    play_pause.src = playIcon;
+    play_pause.alt = 'Play/Pause';
+    function playPauseClick( ) {
+      if (A.initFlag) A.init( );
+      else A.toggleAudio( );
+    }
+    play_pause.onclick = playPauseClick;
+    play_pause.classList.add( 'link' );
+    links.appendChild(play_pause);
+
+    //Next
+    var nextButton = document.createElement('img');
+    nextButton.src = nextIcon;
+    nextButton.alt = 'Next Song';
+    function nextClick( ) { A.nextSong(); }
+    nextButton.onclick = nextClick;
+    nextButton.classList.add( 'link' );
+    nextButton.classList.add( 'changeSong' )
+    links.appendChild(nextButton);
+
+    // Instagram link
+    var instagramLink = createLink( 'https://www.instagram.com/commonslc/', instaIcon, "Instagram");
+    instagramLink.classList.add( 'link' );
+    links.appendChild(instagramLink);
+
+    // Twitter link
+    var twitterLink = createLink( 'https://twitter.com/commonslc_', twitterIcon, "Twitter");
+    twitterLink.classList.add( 'link' );
+    links.appendChild(twitterLink);
+
+    _titleDiv.appendChild( links );
+    links.classList.add( 'links' );
 
     return element;
 }

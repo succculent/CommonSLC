@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
-//var SRC = path.resolve(__dirname, 'src/index.js');
+var SRC = path.resolve(__dirname, 'src/index.js');
 
 module.exports = {
   mode: 'development',
@@ -14,7 +13,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'A.T.',
+      title: 'Common Productions',
     }),
   ],
   output: {
@@ -34,10 +33,6 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.obj$/,
-        loader: 'webpack-obj-loader'
-      },
-      {
         test: /\.mtl$/,
         loader: 'mtl-loader'
       },
@@ -52,6 +47,14 @@ module.exports = {
       {
         test: /\.wav$/,
         loader: 'file-loader'
+      },
+      {
+        test: /\.svg$/,
+        loader: 'svg-url-loader',
+      },
+      {
+        test: /\.png$/,
+        loader: 'url-loader',
       },
     ],
   },

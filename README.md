@@ -1,7 +1,10 @@
 # Graphics_v4
-This is the repo for my personal website featuring custom web visuals to my music!  This is also a template I use for all my webGL/ThreeJS graphics projects. Built with webpack and published on https://www.toydemir.org
+This is the repo for Common Productions SLC. This will feature our work and act as a homepage with information and links. Site published soon on commonslc.com
 
 ### ToDo:
-1. Implement shader transitions
-2. Implement a particle based mouse follow smoke shader
-3. Make. More. Visuals
+1. Resize Bug
+2. Stained Glass Shader
+3. Add information / about
+4. Add some type of mouse interactivity
+5. Add links to instagram and twitter
+6. Add a feature showcasing our next event
