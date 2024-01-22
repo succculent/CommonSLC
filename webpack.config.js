@@ -13,7 +13,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Common Productions',
+      title: 'C.C.SLC',
     }),
   ],
   output: {
