@@ -7,4 +7,4 @@ I decided to significantly simplify this page. Redeveloped the whole page in a s
 ### TODO
 - particle effect for #about
 - tap / mouse effects for fun
-- dark mode (read users current mode)
+- add a way to scroll through past posters (and future posters)
